@@ -6,7 +6,13 @@ namespace lynx{
     class timer{
         public:
             u_int16_t start_time = pros::millis();
+            u_int16_t target_time;
             bool running = false;
+
+            //constructor
+            timer(u_int16_t target_time = 0){
+                this->target_time = target_time;
+            }
 
             //start the timer
             void start(){
