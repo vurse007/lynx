@@ -1,0 +1,35 @@
+#include <utility>
+#include <vector> 
+
+class Field_Object {
+    public:
+        int center_x;
+        int center_y;
+        int length_x;
+        int width_y;
+        std::vector<std::pair<int, int>> node_coordinates;
+
+        void add_node(const std::pair<int, int>& node) {
+            node_coordinates.push_back(node);
+        }
+        
+        void remove_node(int node_id) {
+            if (node_id >= 0 && node_id < node_coordinates.size()) {
+                node_coordinates.erase(node_coordinates.begin() + node_id);
+            }
+            else {
+                pros::screen::set_pen(COLOR_RED);
+                pros::screen::print(pros::TEXT_MEDIUM, 3, "Error 01: Node ID does not exist.");
+                pros::delay(1000);
+            }
+        }
+};
+
+class Robot_Subsystems {
+    public: 
+        int node_x;
+        int node_y;
+
+    //Add stuff for the later Goto Function//
+    //Will need to reconsider is every subsystem will be an object, maybe some specifics with inheritted class? Need to revisit this when I am down playing with classes//
+}
