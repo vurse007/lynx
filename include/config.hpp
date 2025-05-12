@@ -2,6 +2,7 @@
 #include "main.h"
 #include "motors.hpp"
 
+// create all of your devices and a lynx chassis inside of the global namespace
 namespace global{
     namespace port{
         constexpr int FR = 1;
@@ -32,3 +33,5 @@ namespace global{
 
     pros::Imu imu(port::IMU);
 }
+
+//create a pid object below
