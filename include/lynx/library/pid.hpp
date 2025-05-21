@@ -48,7 +48,7 @@ namespace lynx {
                     deadband(deadband),
                     slew(slew) {}
 
-            double calculate(double target, double current, double speed_limit){
+            double calculate(double target, double current, double speed_limit=127){
                 // Set current, target, and error
                 this->target_value = target;
                 this->current_value = current;

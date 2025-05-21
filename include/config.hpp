@@ -1,6 +1,6 @@
 #pragma once
 #include "main.h"
-#include "motors.hpp"
+#include "lynx.hpp"
 
 // create all of your devices and a lynx chassis inside of the global namespace
 namespace global{
@@ -26,8 +26,8 @@ namespace global{
             {port::ML, pros::E_MOTOR_GEAR_600, false},
             {port::BL, pros::E_MOTOR_GEAR_600, true}
         },
-        2.75,
-        1.0,
+        3.25,
+        0.75,
         500
     };
 
