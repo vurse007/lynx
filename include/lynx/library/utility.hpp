@@ -47,4 +47,30 @@ namespace lynx{
                 running = false;
             }
     };
+
+    class poly{
+        private:
+            std::vector<long double> coefficients;
+
+        public:
+            poly(const std::vector<long double>& coeffs){
+                this->coefficients = coeffs;
+            }
+
+            void update_coefficients(const std::vector<long double>& coeffs){
+                this->coefficients = coeffs;
+            }
+
+            long double evaluate(long double x) const{
+                long double y = 0.00;
+                for (const double& coeff : this->coefficients){
+                    y = (y*x) + coeff; //using const to prevent changing of coeffs and & for preventing copy of the vector every time the for loop runs
+                }
+                return y;
+            }
+
+            long double scientific_notation(long double number, double exponent){
+                return number * pow(10, exponent);
+            }
+    };
 }
