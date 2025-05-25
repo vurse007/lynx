@@ -1,0 +1,19 @@
+{
+	///////////////////
+	// Lynx Snippets //
+	///////////////////
+
+	//scope is for languages
+	//prefix is what letters you type to trigger the snippet
+	//body is the code that will be inserted
+	//description is the description of the snippet, no loc file needed
+
+	 "Example Function": {
+	 	"scope": "c,cpp,plaintext",
+	 	"prefix": "Example Function",
+	 	"body": [
+	 		"Example_Function('value_1','value_2');",
+	 	],
+	 	"description": "Description, no loc"
+	 },
+}
