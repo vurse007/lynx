@@ -63,7 +63,7 @@ namespace lynx{
     }
 
     // chassis class that wraps left and right sides
-    class chassis {
+    class drivetrain {
     public:
 
         group left;
@@ -73,7 +73,7 @@ namespace lynx{
         const double external_gear_ratio;
         const double track_width;
 
-        chassis(const std::vector<motor_specs>& left_specs, const std::vector<motor_specs>& right_specs, const double wheel_diam, const double ext_gr, const double track_wid)
+        drivetrain(const std::vector<motor_specs>& left_specs, const std::vector<motor_specs>& right_specs, const double wheel_diam, const double ext_gr, const double track_wid)
             : left(left_specs), right(right_specs), wheel_diameter(wheel_diam), external_gear_ratio(ext_gr), track_width(track_wid) {}
 
         

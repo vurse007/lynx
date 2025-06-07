@@ -2,11 +2,15 @@
 #include "main.h"
 #include <chrono>
 
+#define LYNX_NULL std::nullopt
+
 namespace lynx{
+
+    //keeps track of time using pros::millis - make objects to have multiple timers throughout project
     class timer{
         public:
-            u_int16_t start_time = pros::millis();
-            u_int16_t target_time;
+            u_int32_t start_time = pros::millis();
+            u_int32_t target_time;
             bool running = false;
 
             //constructor
@@ -38,7 +42,8 @@ namespace lynx{
             }
 
             //checks if a certain amount of time has passed
-            bool has_elapsed(u_int32_t ms) const{
+            bool has_elapsed(u_int32_t ms = 0) const{
+                if (ms == 0) ms = target_time;
                 return elapsed() >= ms;
             }
 
@@ -48,6 +53,7 @@ namespace lynx{
             }
     };
 
+    //allows you to save large polynomials and evaluate them when needed - main use is taylor polynomials throughout this project
     class poly{
         private:
             std::vector<long double> coefficients;
@@ -73,4 +79,28 @@ namespace lynx{
                 return number * pow(10, exponent);
             }
     };
+
+    //enum class for passing flags into a function to change the way it behaves
+    enum class flags {
+        none = 0, //0000
+        prt_error = 1 << 0, //0001
+        prt_time = 1 << 1, //0010
+        hc_off = 1 << 2 //0100
+    };
+    //since we are using enum class for safety we must do some operator functions since the types need to be casted
+    inline flags operator|(flags a, flags b){
+        return static_cast<flags>(
+            static_cast<std::underlying_type_t<flags>>(a) | static_cast<std::underlying_type_t<flags>>(b)
+        );
+    }
+    inline flags operator|=(flags& a, flags b){
+        a = a | b;
+        return a;
+    }
+    inline bool has_flag(flags flag, flags flags_to_check){
+        return (static_cast<std::underlying_type_t<flags>>(flag) & static_cast<std::underlying_type_t<flags>>(flags_to_check)) != 0;
+    }
+
+    timer drive_timer; //both are initialized with default values of target=0 - update later based on the user's needs
+    timer turn_timer;
 }
