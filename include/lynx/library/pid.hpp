@@ -176,13 +176,14 @@ namespace lynx {
                 position = global::imu.get_heading();
             }
         }
+        double net_turn = target - position; //find the net turn distance - do fabs to get magnitude because it is signed on direction
 
         global::chassis.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
         pid.reset();
 
         //find the timeout and set it
-        drive_timer.target_time = timeout.value_or(drive_timeout.evaluate(target));
-        drive_timer.restart();
+        turn_timer.target_time = timeout.value_or(turn_timeout.evaluate(fabs(net_turn)));
+        turn_timer.restart();
 
         while (true){
 
@@ -218,7 +219,7 @@ namespace lynx {
 
             //breaking out of the loop
             if (pid.has_settled()) break; //if the pid settled - break out
-            if (drive_timer.has_elapsed()) break; //if the max amt of time has been reached - break out
+            if (turn_timer.has_elapsed()) break; //if the max amt of time has been reached - break out
 
             //chaining movements together
             if (chain_pos != LYNX_NULL && fabs(pid.error) <= chain_pos) break; //break out if we are the chaining position
@@ -235,6 +236,53 @@ namespace lynx {
     }
 
     void turn_relative(double target, std::optional<double> chain_pos = LYNX_NULL, std::optional<double> timeout = LYNX_NULL, lynx::PID& pid = turn_default, flags passed_flags = flags::none){
+        //find the target relatively
+        double position = global::imu.get_heading();
+        if (position > 180) position = ((360-position) * -1); //wrap to -180 to 180
+        target = position + target;
 
+        double net_turn = target - position; //find the net turn distance - do fabs to get magnitude because it is signed on direction
+
+        global::chassis.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+        pid.reset();
+
+        //find the timeout and set it
+        turn_timer.target_time = timeout.value_or(turn_timeout.evaluate(fabs(net_turn)));
+        turn_timer.restart();
+
+        while (true){
+            //get the current heading
+            double current_heading = global::imu.get_heading();
+            if (current_heading > 180) current_heading = ((360-current_heading) * -1); //wrap to -180 to 180
+
+            pid.error = target - current_heading;
+
+            //go calculate speed with deadband in mind
+            if (fabs(pid.error) < pid.deadband){
+                pid.speed = 0; //lock the speed of the object to 0 - making sure nothing at all moves
+            }
+            else {
+                pid.speed = pid.calculate(target, current_heading, 127);
+            }
+
+            //output speeds
+            global::chassis.left.move(pid.speed);
+            global::chassis.right.move(-pid.speed);
+
+            //breaking out of the loop
+            if (pid.has_settled()) break; //if the pid settled - break out
+            if (turn_timer.has_elapsed()) break; //if the max amt of time has been reached - break out
+
+            //chaining movements together
+            if (chain_pos != LYNX_NULL && fabs(pid.error) <= chain_pos) break; //break out if we are the chaining position
+
+            //flags stuff
+            if (has_flag(passed_flags, flags::prt_error)){
+                //if the function is passed with the "print error" flag
+                global::con.print(0, 0, "turn_err: %f", pid.error);
+            }
+
+            pros::delay(5);
+        }
     }
 }
