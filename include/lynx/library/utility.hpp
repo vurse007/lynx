@@ -1,6 +1,7 @@
 #pragma once
 #include "main.h"
 #include <chrono>
+#include "config.hpp"
 
 #define LYNX_NULL std::nullopt
 
@@ -79,6 +80,34 @@ namespace lynx{
                 return number * pow(10, exponent);
             }
     };
+
+    //utility functions
+    namespace util {
+        double wrap_to_180(double angle){
+            //wraps an angle to the range of -180 to 180 degrees
+            if (angle > 180){
+                angle -= 360;
+            } else if (angle < -180){
+                angle += 360;
+            }
+            return angle;
+        }
+
+        void absolute_logic(double& position, double& target){
+            if ((target < 0) && (position > 0)){ //if the target is negative and the position is positive
+                if ((position - target) >= 180){ //see if the error is greater than 180 degreees - we need to turn other way if so
+                    target = target + 360; //take the target and add a full rotation to it so we now are turning the shorter direction
+                    position = global::imu.get_heading(); //update position
+                }
+            }
+            else if ((target > 0) && (position < 0)){ //if the target is positive and the position is negative
+                if ((target - position) >= 180){ //see if the error is greater than 180
+                    target = target - 360; //add a full rotation to the left this time so we can turn the shorter direction
+                    position = global::imu.get_heading();
+                }
+            }
+        }
+    }
 
     //enum class for passing flags into a function to change the way it behaves
     enum class flags {

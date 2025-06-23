@@ -51,14 +51,29 @@ namespace lynx{
             }
             return nullptr;
         }
+
+        double get_avg_pos() const {
+            double total_pos = 0;
+            int count = 0;
+            for (const auto& motor : motors) {
+                if (motor) {
+                    total_pos += motor->get_position();
+                    count++;
+                }
+            }
+            if (count == 0) return 0;
+            return total_pos / count;
+        }
+
+        const std::vector<std::shared_ptr<pros::Motor>>& get_motors() const {
+            return motors;
+        }
     };
 
     //if something out of the ordinary needs to be done to the motors
     inline void apply_to_group(group& motor_group, const std::function<void(std::shared_ptr<pros::Motor>)>& func) {
-        for (int i = 0; ; ++i) {
-            auto motor = motor_group.get_motor(i);
-            if (!motor) break;
-            func(motor);
+        for (const auto& motor : motor_group.get_motors()) {
+            if (motor) func(motor);
         }
     }
 
@@ -94,22 +109,11 @@ namespace lynx{
         }
 
         void apply_to_chassis(const std::function<void(std::shared_ptr<pros::Motor>)>& func) {
-            for (int i = 0; ; ++i) {
-                auto leftmotor = left.get_motor(i);
-                auto rightmotor = right.get_motor(i);
-        
-                // Break the loop if both motors are null (end of both sides)
-                if (!leftmotor && !rightmotor) break;
-        
-                // Apply func to the left motor if it exists
-                if (leftmotor) {
-                    func(leftmotor);
-                }
-        
-                // Apply func to the right motor if it exists
-                if (rightmotor) {
-                    func(rightmotor);
-                }
+            for (const auto& motor : left.get_motors()) {
+                if (motor) func(motor);
+            }
+            for (const auto& motor : right.get_motors()) {
+                if (motor) func(motor);
             }
         }
 

@@ -61,6 +61,18 @@ lynx::PID turn_default{
     1
 };
 
+lynx::PID heading_correction_default{
+    {3,0,0,0},
+    10,
+    {4,0,0,0},
+    500, 
+    1000,
+    127,
+    3,
+    500,
+    1
+};
+
 //create polynomial objects below
 lynx::poly drive_timeout {
     {

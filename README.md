@@ -1,6 +1,8 @@
-Template Plan:
+TO DO LIST:
 
-- Basic move
-- PID -> optimize
+pressing:
+- arc turns
+
+future:
 - Odometry -> aside distance sensor odom
 - Merge recorders some day
