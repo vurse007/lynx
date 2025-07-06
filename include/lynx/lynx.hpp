@@ -1,4 +1,5 @@
 #pragma once
-#include "library/motors.hpp"
-#include "library/pid.hpp"
-#include "library/utility.hpp"
+#include "lynx/library/motors.hpp"
+#include "lynx/library/pid.hpp"
+#include "lynx/library/utility.hpp"
+#include "config.hpp"
