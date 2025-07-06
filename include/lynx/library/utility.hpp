@@ -85,12 +85,9 @@ namespace lynx{
     namespace util {
         double wrap_to_180(double angle){
             //wraps an angle to the range of -180 to 180 degrees
-            if (angle > 180){
-                angle -= 360;
-            } else if (angle < -180){
-                angle += 360;
-            }
-            return angle;
+            angle = fmod(angle + 180.0, 360.0);
+            if (angle < 0) angle += 360.0;
+            return angle - 180.0;
         }
 
         void absolute_logic(double& position, double& target){
@@ -132,4 +129,5 @@ namespace lynx{
 
     timer drive_timer; //both are initialized with default values of target=0 - update later based on the user's needs
     timer turn_timer;
+    timer arc_timer;
 }

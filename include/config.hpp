@@ -15,6 +15,10 @@ namespace global{
         constexpr int IMU = 7;
     }
 
+    namespace immutables{
+        constexpr double DEFAULT_NUDGE_MAGNITUDE = 10;
+    }
+
     lynx::drivetrain chassis {
         {
             {port::FR, pros::E_MOTOR_GEAR_600, false},
@@ -61,6 +65,18 @@ lynx::PID turn_default{
     1
 };
 
+lynx::PID arc_default{
+    {1,0,0,0}, //general constants
+    50, //refined range
+    {2,0,0,0}, //refined constants
+    500, //integral threshold (what range the integral is enabled and is allowed to built up)
+    1000, //max integral value allowed
+    127, //slew (set to 127 to disable)
+    10, //what range does the settle timer enable in
+    500, //settle timer must run for these many ms to break out of the pid loop
+    7 //deadband (at +- what value will the pid stop giving an output)
+};
+
 lynx::PID heading_correction_default{
     {3,0,0,0},
     10,
@@ -85,6 +101,16 @@ lynx::poly drive_timeout {
 };
 
 lynx::poly turn_timeout {
+    {
+        5, //x^4
+        4, //x^3
+        3, //x^2
+        2, //x
+        1, //constant
+    }
+};
+
+lynx::poly arc_timeout {
     {
         5, //x^4
         4, //x^3
