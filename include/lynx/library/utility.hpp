@@ -89,6 +89,11 @@ namespace lynx{
             if (angle < 0) angle += 360.0;
             return angle - 180.0;
         }
+        double wrap_to_pi(double angle) {
+            angle = std::fmod(angle + M_PI, 2 * M_PI);
+            if (angle < 0) angle += 2 * M_PI;
+            return angle - M_PI;
+        }
 
         void absolute_logic(double& position, double& target){
             if ((target < 0) && (position > 0)){ //if the target is negative and the position is positive

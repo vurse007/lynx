@@ -13,6 +13,9 @@ namespace global{
         constexpr int BL = 6;
 
         constexpr int IMU = 7;
+
+        constexpr int H_POD = 8;
+        constexpr int V_POD = 9;
     }
 
     namespace immutables{
@@ -32,11 +35,18 @@ namespace global{
         },
         3.25,
         0.75,
-        500
+        500,
+        "TWO_POD_IMU",
+        0,
+        0,
+        8
     };
 
     pros::Imu imu(port::IMU);
     pros::Controller con(pros::E_CONTROLLER_MASTER);
+
+    pros::Rotation horizontal_pod(port::H_POD);
+    pros::Rotation vertical_pod(port::V_POD);
 }
 
 

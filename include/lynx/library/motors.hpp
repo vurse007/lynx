@@ -87,9 +87,15 @@ namespace lynx{
         const double wheel_diameter;
         const double external_gear_ratio;
         const double track_width;
+        const std::string odom_type;
+        const double odom_track_width;
+        const double odom_horizontal_offset;
+        const double odom_vertical_offset;
+        const double odom_wheel_diameter;
+        
 
-        drivetrain(const std::vector<motor_specs>& left_specs, const std::vector<motor_specs>& right_specs, const double wheel_diam, const double ext_gr, const double track_wid)
-            : left(left_specs), right(right_specs), wheel_diameter(wheel_diam), external_gear_ratio(ext_gr), track_width(track_wid) {}
+        drivetrain(const std::vector<motor_specs>& left_specs, const std::vector<motor_specs>& right_specs, const double wheel_diam, const double ext_gr, const double track_wid, const std::string odom_type = "NO_ODOM", const double odom_track_wid = 0, const double odom_horizontal_offset = 0, const double odom_vertical_offset = 0, const double odom_wheel_diameter = 0)
+            : left(left_specs), right(right_specs), wheel_diameter(wheel_diam), external_gear_ratio(ext_gr), track_width(track_wid), odom_type(odom_type), odom_track_width(odom_track_wid), odom_horizontal_offset(odom_horizontal_offset), odom_vertical_offset(odom_vertical_offset), odom_wheel_diameter(odom_wheel_diameter){}
 
         
         // helper functions to do common tasks to motors
